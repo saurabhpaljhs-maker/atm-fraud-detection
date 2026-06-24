@@ -135,5 +135,5 @@ This project demonstrates real-world banking domain knowledge from previous expe
 ## Author
 
 Saurabh Pal  
-DevOps & Multi-Cloud Infrastructure Engineer  
+Multi-Cloud DevOps Engineer  
 [Portfolio](https://saurabhpalportfolio.netlify.app) 
