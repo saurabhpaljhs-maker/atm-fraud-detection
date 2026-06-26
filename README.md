@@ -1,11 +1,10 @@
-# Real-Time ATM Fraud Detection Pipeline
-
 ## Overview
 
 A production-grade fraud detection system that processes ATM transactions in real-time using Google Cloud Platform and Azure DevOps. The system ingests transaction streams, applies fraud detection rules, and stores results in BigQuery for analytics.
 
 ## Architecture
 
+```mermaid
 flowchart LR
     subgraph "Source Control & CI/CD"
         GitHub[GitHub Repo] 
@@ -51,7 +50,6 @@ flowchart LR
     class GKE,PubSub,BQ,Artifact gcp
     class Terraform,AzDO,Docker tool
     class Producer,Consumer app
-
 **Producer Component**
 - Generates simulated ATM transactions with realistic data (card ID, amount, location, timestamp)
 - Publishes messages to Google Cloud Pub/Sub topic
