@@ -6,6 +6,52 @@ A production-grade fraud detection system that processes ATM transactions in rea
 
 ## Architecture
 
+flowchart LR
+    subgraph "Source Control & CI/CD"
+        GitHub[GitHub Repo] 
+        AzDO[Azure DevOps] 
+    end
+
+    subgraph "Infrastructure as Code"
+        Terraform[Terraform IaC] 
+    end
+
+    subgraph "Google Cloud Platform"
+        GKE[GKE Cluster<br/>atm-fraud-gke]
+        PubSub[Pub/Sub Topic & Subscription]
+        BQ[BigQuery Dataset & Table]
+        Artifact[Artifact Registry]
+    end
+
+    subgraph "Application Components"
+        Producer[Producer.py<br/>Transaction Generator]
+        Consumer[Consumer.py + fraud_detector.py<br/>Real-time Processor]
+    end
+
+    %% CI/CD Flow
+    GitHub --> AzDO
+    AzDO --> Docker[Docker Build & Push]
+    Docker --> Artifact
+
+    %% Infrastructure
+    Terraform --> GKE
+    Terraform --> PubSub
+    Terraform --> BQ
+
+    %% Data Flow
+    Producer --> PubSub
+    PubSub --> Consumer
+    Consumer --> BQ
+    Consumer -. Fraud Alert .-> Monitoring[Real-time Alerts]
+
+    classDef gcp fill:#4285F4,stroke:#fff,stroke-width:2px,color:white;
+    classDef tool fill:#34A853,stroke:#fff,stroke-width:2px,color:white;
+    classDef app fill:#FBBC05,stroke:#333,stroke-width:2px;
+
+    class GKE,PubSub,BQ,Artifact gcp
+    class Terraform,AzDO,Docker tool
+    class Producer,Consumer app
+
 **Producer Component**
 - Generates simulated ATM transactions with realistic data (card ID, amount, location, timestamp)
 - Publishes messages to Google Cloud Pub/Sub topic
